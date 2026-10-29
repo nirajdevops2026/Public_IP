@@ -52,6 +52,17 @@ stages:
         steps:
           - checkout: self
 
+          - task: TerraformTask@5
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              backendServiceArm: 'one-app-service-connection'
+              backendAzureRmResourceGroupName: '0001'
+              backendAzureRmStorageAccountName: 'raj0001'
+              backendAzureRmContainerName: 'raj-container-0001'
+              backendAzureRmKey: 'raj-state'
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'
@@ -73,6 +84,17 @@ stages:
         steps:
           - checkout: self
 
+          - task: TerraformTask@5
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              backendServiceArm: 'one-app-service-connection'
+              backendAzureRmResourceGroupName: '0001'
+              backendAzureRmStorageAccountName: 'raj0001'
+              backendAzureRmContainerName: 'raj-container-0001'
+              backendAzureRmKey: 'raj-state'
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'
