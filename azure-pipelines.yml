@@ -43,10 +43,10 @@ stages:
         environmentServiceNameAzureRM: 'one-app-service-connection'
 
 - stage: terrafrom01
-  displayName: init
+  displayName: apply
   jobs:
-  - job: init
-    displayName: Init
+  - job: apply
+    displayName: apply
     steps:
     - task: TerraformTask@5
       inputs:
