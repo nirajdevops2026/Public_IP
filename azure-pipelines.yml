@@ -1,0 +1,43 @@
+pool: raj-pool
+trigger:
+- main
+- feature
+
+stages:
+- stage: terraform-install(ye-id-hai-kuchh-bhi-daal-do)
+  displayName: terraform-install
+  jobs:
+  - job: initAndvalidate
+    displayName: Install
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+
+- stage: terrafrom01(ye-id-hai-kuchh-bhi-daal-do)
+  displayName: init-validate
+  jobs:
+  - job: initAndvalidate
+    displayName: Init
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'one-app-service-connection'
+        backendAzureRmResourceGroupName: '0001'
+        backendAzureRmStorageAccountName: 'raj0001'
+        backendAzureRmContainerName: 'raj-container-0001'
+        backendAzureRmKey: 'raj-state'
+
+- stage: terrafrom01(ye-id-hai-kuchh-bhi-daal-do)
+  displayName: plan
+  jobs:
+  - job: initAndvalidate
+    displayName: plan
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'one-app-service-connection'
