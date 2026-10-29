@@ -17,7 +17,7 @@ stages:
 - stage: terrafrom01
   displayName: init-validate
   jobs:
-  - job: initAndvalidate
+  - job: init
     displayName: Init
     steps:
     - task: TerraformTask@5
@@ -30,12 +30,6 @@ stages:
         backendAzureRmContainerName: 'raj-container-0001'
         backendAzureRmKey: 'raj-state'
 
-- stage: terrafrom02
-  displayName: plan
-  jobs:
-  - job: validate
-    displayName: plan
-    steps:
     - task: TerraformTask@5
       inputs:
         provider: 'azurerm'
