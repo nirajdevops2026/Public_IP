@@ -33,7 +33,7 @@ stages:
 - stage: terrafrom02
   displayName: plan
   jobs:
-  - job: initAndvalidate
+  - job: validate
     displayName: plan
     steps:
     - task: TerraformTask@5
