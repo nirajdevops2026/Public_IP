@@ -1,55 +1,86 @@
+
 pool: raj-pool
+
 trigger:
-- main
-- feature
+  - main
+  - feature
 
 stages:
-- stage: terraform
-  displayName: terraform-install
-  jobs:
-  - job: initAndvalidate
-    displayName: Install
-    steps:
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
+  - stage: terraform
+    displayName: Terraform Install
+    jobs:
+      - job: install
+        displayName: Install Terraform
+        steps:
+          - checkout: self
 
-- stage: terrafrom02
-  displayName: init
-  jobs:
-  - job: init
-    displayName: Init
-    steps:
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        backendServiceArm: 'one-app-service-connection'
-        backendAzureRmResourceGroupName: '0001'
-        backendAzureRmStorageAccountName: 'raj0001'
-        backendAzureRmContainerName: 'raj-container-0001'
-        backendAzureRmKey: 'raj-state'
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
 
-- stage: terrafrom03
-  displayName: plan
-  jobs:
-  - job: plan
-    displayName: plan
-    steps:
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        environmentServiceNameAzureRM: 'one-app-service-connection'
+  - stage: terraform02
+    displayName: Terraform Init
+    dependsOn: terraform
+    jobs:
+      - job: init
+        displayName: Init
+        steps:
+          - checkout: self
 
-- stage: terrafrom01
-  displayName: apply
-  jobs:
-  - job: apply
-    displayName: apply
-    steps:
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        environmentServiceNameAzureRM: 'one-app-service-connection'
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
+
+          - task: TerraformTask@5
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              backendServiceArm: 'one-app-service-connection'
+              backendAzureRmResourceGroupName: '0001'
+              backendAzureRmStorageAccountName: 'raj0001'
+              backendAzureRmContainerName: 'raj-container-0001'
+              backendAzureRmKey: 'raj-state'
+
+  - stage: terraform03
+    displayName: Terraform Plan
+    dependsOn: terraform02
+    jobs:
+      - job: plan
+        displayName: Plan
+        steps:
+          - checkout: self
+
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
+
+          - task: TerraformTask@5
+            displayName: Terraform Plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              environmentServiceNameAzureRM: 'one-app-service-connection'
+
+  - stage: terraform04
+    displayName: Terraform Apply
+    dependsOn: terraform03
+    jobs:
+      - job: apply
+        displayName: Apply
+        steps:
+          - checkout: self
+
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
+
+          - task: TerraformTask@5
+            displayName: Terraform Apply
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              environmentServiceNameAzureRM: 'one-app-service-connection'
