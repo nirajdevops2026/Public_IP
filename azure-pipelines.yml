@@ -4,7 +4,7 @@ trigger:
 - feature
 
 stages:
-- stage: terraform-install(ye-id-hai-kuchh-bhi-daal-do)
+- stage: terraform
   displayName: terraform-install
   jobs:
   - job: initAndvalidate
@@ -14,7 +14,7 @@ stages:
       inputs:
         terraformVersion: 'latest'
 
-- stage: terrafrom01(ye-id-hai-kuchh-bhi-daal-do)
+- stage: terrafrom01
   displayName: init-validate
   jobs:
   - job: initAndvalidate
@@ -30,7 +30,7 @@ stages:
         backendAzureRmContainerName: 'raj-container-0001'
         backendAzureRmKey: 'raj-state'
 
-- stage: terrafrom01(ye-id-hai-kuchh-bhi-daal-do)
+- stage: terrafrom02
   displayName: plan
   jobs:
   - job: initAndvalidate
